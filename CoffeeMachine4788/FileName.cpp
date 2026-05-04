@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 using namespace std;
 
 class CoffeeMachine {
@@ -14,7 +14,7 @@ public:
 
 private:
     void refillBean();          // 원두 부족 시 보충 여부 확인
-    void selectMenu();          // 메뉴 선택 (1.아이스 / 2.커피, 이외 번호는 재선택)
+	void selectMenu();          // 메뉴 선택 (1.아이스 / 2.커피, 이외 번호는 재선택, 참고로 아이스랑 핫이랑 음료양이 달라서 메뉴 선택에서 나눴고 그에따라서 추출 시간도 달라질거같아서..분리해서 생각함!)
     void makeIce();             // 아이스 커피: 얼음 준비 안내 후 추출
     void makeHot();             // 따뜻한 커피: 화상 주의 안내 후 추출
     void extract(int seconds);  // 커피 추출 (물, 원두 소비)
