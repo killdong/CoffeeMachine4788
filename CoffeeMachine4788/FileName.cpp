@@ -2,7 +2,6 @@
 using namespace std;
 
 class CoffeeMachine {
-
 private:
     int bean;   // 원두의 양
 
@@ -13,11 +12,11 @@ public:
     void start();  // 원두 확인 후 메뉴 선택으로 이동
 
 private:
-    void refillBean();          // 원두 부족 시 보충 여부 확인
-	void selectMenu();          // 메뉴 선택 (1.아이스 / 2.커피, 이외 번호는 재선택, 참고로 아이스랑 핫이랑 음료양이 달라서 메뉴 선택에서 나눴고 그에따라서 추출 시간도 달라질거같아서..분리해서 생각함!)
+    bool refillBean();          // 원두 부족 시 보충 여부 확인
+    void selectMenu();          // 메뉴 선택 (1.아이스 / 2.커피, 이외 번호는 재선택, 참고로 아이스랑 핫이랑 음료양이 달라서 메뉴 선택에서 나눴고 그에따라서 추출 시간도 달라질거같아서..분리해서 생각함!)
     void makeIce();             // 아이스 커피: 얼음 준비 안내 후 추출
     void makeHot();             // 따뜻한 커피: 화상 주의 안내 후 추출
-    void extract(int seconds);  // 커피 추출 (물, 원두 소비)
+    void extract(int seconds);  // 커피 추출 (원두 소비)
 };
 
 CoffeeMachine::CoffeeMachine() {
@@ -29,7 +28,7 @@ CoffeeMachine::~CoffeeMachine() {
     cout << "커피머신 끌게요~ 안녕!" << endl;
 }
 
-void CoffeeMachine::refillBean() {
+bool CoffeeMachine::refillBean() {
     int choice;
     cout << "앗 원두가 부족해요ㅠ 채울까요? (1.응 / 2.ㄴㄴ): ";
     cin >> choice;
@@ -37,10 +36,11 @@ void CoffeeMachine::refillBean() {
     if (choice == 1) {
         bean = 100;
         cout << "원두 채웠어요!" << endl;
+        return true;   // 계속 진행
     }
     else {
         cout << "알겠어요~ 커피머신 끌게요!" << endl;
-        exit(0);
+        return false;  // 종료 신호 → 소멸자 정상 호출
     }
 }
 
@@ -84,10 +84,25 @@ void CoffeeMachine::selectMenu() {
 }
 
 void CoffeeMachine::start() {
-    while (bean < 10) {
-        refillBean();
+    while (true) {
+        // 원두 부족하면 보충 여부 확인
+        while (bean < 10) {
+            if (!refillBean()) {
+                return; 
+            }
+        }
+
+        selectMenu();
+
+        // 한 잔 뽑고 나서 계속할지 물어보기
+        int choice;
+        cout << "한 잔 더 드릴까요? (1.응 / 2.ㄴㄴ): ";
+        cin >> choice;
+        if (choice != 1) {
+            cout << "또 오세요~~ :D" << endl;
+            return;  
+        }
     }
-    selectMenu();
 }
 
 int main() {
